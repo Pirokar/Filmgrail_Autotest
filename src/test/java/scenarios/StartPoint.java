@@ -19,16 +19,18 @@ import java.net.MalformedURLException;
 
 public class StartPoint {
     AndroidDriver driver;
+    WebDriverWait wait;
 
     @BeforeMethod
     protected void prepareAndroidForAppium() throws MalformedURLException {
         driver = Driver.setup();
+        wait = Driver.prepareWait();
     }
 
     @Test
     public void startTesting() {
-        new GoogleLoginTest(driver).start();
-        new SignInTest(driver).start();
+        new GoogleLoginTest(driver, wait).start();
+        new SignInTest(driver, wait).start();
     }
 
     @AfterMethod

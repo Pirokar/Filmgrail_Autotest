@@ -3,6 +3,7 @@ package helpers;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -13,6 +14,7 @@ import java.net.URL;
  */
 public class Driver {
     public static final int WAIT_TIME_IN_SEC = 30;
+    private static AndroidDriver driver = null;
 
     public static AndroidDriver setup() throws MalformedURLException {
         String workingDir = System.getProperty("user.dir");
@@ -25,6 +27,15 @@ public class Driver {
         capabilities.setCapability("app-package", "com.Filmgrail.android.debug");
         capabilities.setCapability("app-activity", ".HomeActivity");
 
-        return new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        return driver;
+    }
+
+    public static WebDriverWait prepareWait() throws MalformedURLException {
+        if(driver != null) {
+            return new WebDriverWait(driver, Driver.WAIT_TIME_IN_SEC);
+        } else {
+            return new WebDriverWait(setup(), Driver.WAIT_TIME_IN_SEC);
+        }
     }
 }
